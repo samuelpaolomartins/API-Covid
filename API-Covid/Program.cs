@@ -138,6 +138,21 @@ namespace APICovid
                             }
                             break;
                         }
+                    case Opcoes.PesquisaContinente:
+                        {
+                            Console.WriteLine("Continentes disponíveis:" +
+                                              "\n1 - África" +
+                                              "\n2 - América do Norte" +
+                                              "\n3 - América do Sul" +
+                                              "\n4 - Asia" +
+                                              "\n5 - Europa" +
+                                              "\n6 - Oceania");
+                            while (true)
+                            {
+
+                            }
+                        }
+                        break;
 
                     default:
                         Console.WriteLine("Opção não existe");

@@ -12,6 +12,7 @@ namespace APICovid
         VisualizarDadosPaisData = 4,    //Se não atribuir valor fica = 3
         VisualizarDadosMundo = 5,       //Se não atribuir valor fica = 4
         VisualizarDadosMundoData = 6,   //Se não atribuir valor fica = 5
-        FecharAplicacao = 7             //Se não atribuir valor fica = 6
+        FecharAplicacao = 7,            //Se não atribuir valor fica = 6
+        PesquisaContinente = 8
     }
 }
