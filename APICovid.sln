@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APICovid", "APICovid\APICovid.csproj", "{5A22BCE0-6942-49B0-9FF0-290951A41907}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A22BCE0-6942-49B0-9FF0-290951A41907}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A22BCE0-6942-49B0-9FF0-290951A41907}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A22BCE0-6942-49B0-9FF0-290951A41907}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A22BCE0-6942-49B0-9FF0-290951A41907}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D4DAB82F-3A07-44A5-8501-53EC64D4028A}
+	EndGlobalSection
+EndGlobal
