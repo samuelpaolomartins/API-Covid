@@ -20,7 +20,8 @@ namespace APICovid
                 "\n4 - Visualizar os dados de um país específico em uma data específica" +
                 "\n5 - Visualizar os dados do mundo todo e" +
                 "\n6 - Visualizar os dados do munddo em uma data específica" +
-                "\n7 - Parar aplicação" +
+                "\n7 - Visualizar dados dos continentes" +
+                "\n8 - Parar aplicação" +
                 "\nDigite uma opção:");
 
                 int escolher;
