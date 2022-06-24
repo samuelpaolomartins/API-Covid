@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Globalization;
+using System.Linq;
 
 namespace APICovid
 {
@@ -140,7 +141,7 @@ namespace APICovid
                         }
                     case Opcoes.PesquisaContinente:
                         {
-                            Console.Write("Continentes disponíveis:" +
+                            /*Console.Write("Continentes disponíveis:" +
                                           "\n1 - África" +
                                           "\n2 - América do Norte" +
                                           "\n3 - América do Sul" +
@@ -154,7 +155,7 @@ namespace APICovid
                             while (!int.TryParse(Console.ReadLine(), out continente))
                             {
                                 Console.Write("Digite um valor válido: ");
-                            }
+                            }*/
 
                             await GetContinents();
 
@@ -471,11 +472,15 @@ namespace APICovid
         static async Task GetContinents()
         {
             StatisticsModel info = await GetEstatistica();
+            StatisticsResponse[] retirarRepeticao = info.Response.Distinct().ToArray();
 
-            foreach (var item in info.Response)
+            foreach(var item in info.Response)
             {
                 Console.WriteLine(item.Continent);
-            } 
+            }
+            Console.WriteLine("############################################################");
+
+            Array.ForEach(retirarRepeticao, item => Console.WriteLine(item.Continent));
         }
     }
 }
