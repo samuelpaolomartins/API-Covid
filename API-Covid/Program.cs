@@ -140,17 +140,24 @@ namespace APICovid
                         }
                     case Opcoes.PesquisaContinente:
                         {
-                            Console.WriteLine("Continentes disponíveis:" +
-                                              "\n1 - África" +
-                                              "\n2 - América do Norte" +
-                                              "\n3 - América do Sul" +
-                                              "\n4 - Asia" +
-                                              "\n5 - Europa" +
-                                              "\n6 - Oceania");
-                            while (true)
-                            {
+                            Console.Write("Continentes disponíveis:" +
+                                          "\n1 - África" +
+                                          "\n2 - América do Norte" +
+                                          "\n3 - América do Sul" +
+                                          "\n4 - Asia" +
+                                          "\n5 - Europa" +
+                                          "\n6 - Oceania" +
+                                          "\nDigite um nº: ");
 
+                            int continente;
+
+                            while (!int.TryParse(Console.ReadLine(), out continente))
+                            {
+                                Console.Write("Digite um valor válido: ");
                             }
+
+                            await GetContinents();
+
                         }
                         break;
 
@@ -460,6 +467,15 @@ namespace APICovid
             await ShowHistorico(paisEscolhido, date);
             return;
 
+        }
+        static async Task GetContinents()
+        {
+            StatisticsModel info = await GetEstatistica();
+
+            foreach (var item in info.Response)
+            {
+                Console.WriteLine(item.Continent);
+            } 
         }
     }
 }
