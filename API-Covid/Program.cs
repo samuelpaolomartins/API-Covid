@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Globalization;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace APICovid
 {
@@ -12,15 +13,14 @@ namespace APICovid
     {
         static async Task Main(string[] args)
         {
-            /*string[] teste = { "abc", "abc", "def", "ghi", "def" };
-            string[] restirarduplicacao = teste.Distinct().ToArray();
+            /*var list = new List<string>{ "abc", "abc", "def", "ghi", "def" };
+            var distinct = list.Distinct().ToList();
 
-            foreach (var item in teste)
+
+            foreach (var item in distinct)
             {
                 Console.WriteLine(item);
             }
-            Console.WriteLine("**************************************");
-            Array.ForEach(restirarduplicacao, item => Console.WriteLine(item));
 
             Console.ReadKey();
             return;*/
@@ -485,13 +485,14 @@ namespace APICovid
         static async Task GetContinents()
         {
             StatisticsModel info = await GetEstatistica();
-            StatisticsResponse[] retirarRepeticao = info.Response.Distinct().ToArray();
+            /*StatisticsResponse[] retirarRepeticao = info.Response.Distinct().ToArray();*/
+
+            var list = new List<string> ();
 
             foreach (var item in info.Response)
             {
-                char[] teste = item.Continent.Distinct().ToArray();
-
-                Array.ForEach(teste, x => Console.Write(x));
+                list.Add(item.Continent);
+                //Console.WriteLine(distinct);
             }
         }
     }
