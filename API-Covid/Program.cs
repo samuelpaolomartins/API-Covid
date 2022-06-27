@@ -12,6 +12,19 @@ namespace APICovid
     {
         static async Task Main(string[] args)
         {
+            /*string[] teste = { "abc", "abc", "def", "ghi", "def" };
+            string[] restirarduplicacao = teste.Distinct().ToArray();
+
+            foreach (var item in teste)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine("**************************************");
+            Array.ForEach(restirarduplicacao, item => Console.WriteLine(item));
+
+            Console.ReadKey();
+            return;*/
+
             while (true)
             {
                 Console.Write("Você deseja" +
@@ -474,13 +487,12 @@ namespace APICovid
             StatisticsModel info = await GetEstatistica();
             StatisticsResponse[] retirarRepeticao = info.Response.Distinct().ToArray();
 
-            foreach(var item in info.Response)
+            foreach (var item in info.Response)
             {
-                Console.WriteLine(item.Continent);
-            }
-            Console.WriteLine("############################################################");
+                char[] teste = item.Continent.Distinct().ToArray();
 
-            Array.ForEach(retirarRepeticao, item => Console.WriteLine(item.Continent));
+                Array.ForEach(teste, x => Console.Write(x));
+            }
         }
     }
 }
