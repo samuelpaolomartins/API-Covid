@@ -152,24 +152,21 @@ namespace APICovid
                         }
                     case Opcoes.PesquisaContinente:
                         {
-                            /*Console.Write("Continentes disponíveis:" +
-                                          "\n1 - África" +
-                                          "\n2 - América do Norte" +
-                                          "\n3 - América do Sul" +
-                                          "\n4 - Asia" +
-                                          "\n5 - Europa" +
-                                          "\n6 - Oceania" +
-                                          "\nDigite um nº: ");
+                            //await GetContinents();
+
+                            var listaContinente = await GetContinents();
+
+                            Console.Write("\nEscolha um continente para ver os dados: ");
 
                             int continente;
 
                             while (!int.TryParse(Console.ReadLine(), out continente))
                             {
                                 Console.Write("Digite um valor válido: ");
-                            }*/
+                            }
 
-                            await GetContinents();
-
+                            string continenteSelecionado = listaContinente[continente - 1];
+                            await ShowContinentValues(continenteSelecionado);
                         }
                         break;
 
@@ -381,18 +378,18 @@ namespace APICovid
             string casosTotal = info.Response[0].Cases.Total == null ? "Sem dados para apresentar" : info.Response[0].Cases.Total?.ToString("N0");
 
             Console.WriteLine($"Continente: {continente}" +
-                                            $"\nPaís: {info.Response[0].Country}" +
-                                            $"\nPopulação: {populacao}" +
-                                            $"\nCasos:" +
-                                            $"\n   Novos: {casosNovos}" + // abreviação
-                                            $"\n   Ativos: {casosAtivos}" +
-                                            $"\n   Crítico: {casosCriticos}" +
-                                            $"\n   Recuperado: {casosRecuperados}" +
-                                            $"\n   a cada 1M Pessoas: {casosMpess}" +
-                                            $"\n   Total: {casosTotal}" +
-                                            $"\nMortes:\n{info.Response[0].Deaths}" +
-                                            $"\nTestes:\n{info.Response[0].Tests}" +
-                                            $"\nData e hora: {info.Response[0].Time:yyyy/MM/dd HH:mm:ss}\n"); // abreviação
+                              $"\nPaís: {info.Response[0].Country}" +
+                              $"\nPopulação: {populacao}" +
+                              $"\nCasos:" +
+                              $"\n   Novos: {casosNovos}" + // abreviação
+                              $"\n   Ativos: {casosAtivos}" +
+                              $"\n   Crítico: {casosCriticos}" +
+                              $"\n   Recuperado: {casosRecuperados}" +
+                              $"\n   a cada 1M Pessoas: {casosMpess}" +
+                              $"\n   Total: {casosTotal}" +
+                              $"\nMortes:\n{info.Response[0].Deaths}" +
+                              $"\nTestes:\n{info.Response[0].Tests}" +
+                              $"\nData e hora: {info.Response[0].Time:yyyy/MM/dd HH:mm:ss}\n"); // abreviação
 
         }
         static async Task MostrarPais(string country = null)
@@ -480,11 +477,11 @@ namespace APICovid
             return;
 
         }
-        static async Task GetContinents()
+        static async Task<List<string>> GetContinents()
         {
             StatisticsModel info = await GetEstatistica();
 
-            var list = new List<string>();
+            var list = new List<string>(); //List<string>(var) list verificar Task<List<string>>
             int posicao = 1;
             foreach (var item in info.Response)
             {
@@ -501,6 +498,41 @@ namespace APICovid
                     posicao++;
                 }
             }
+
+            return list;
+        }
+        static async Task ShowContinentValues(string continent)
+        {
+            //pegar a informação do continente selecionado
+            //somar as informações necessárias
+            //printar as informações
+
+            StatisticsModel info = await GetEstatistica(continent);            
+
+            foreach (var item in info.Response)
+            {
+                string continente = item.Continent;
+                string populacao = item.Population == null ? "Sem dados para apresentar" : item.Population?.ToString("N0");
+                string casosNovos = item.Cases.New == null ? "Sem dados para apresentar" : item.Cases.New?.ToString("N0");
+                string casosAtivos = item.Cases.Active == null ? "Sem dados para apresentar" : item.Cases.Active?.ToString("N0");
+                string casosCritico = item.Cases.Critical == null ? "Sem dados para apresentar" : item.Cases.Critical?.ToString("N0");
+                string casosRecuperado = item.Cases.Recovered == null ? "Sem dados para apresentar" : item.Cases.Recovered?.ToString("N0");
+                string casos1mPessoas = item.Cases.M1Pop == null ? "Sem dados para apresentar" : item.Cases.M1Pop?.ToString("N0");
+                string casosTotais = item.Cases.Total == null ? "Sem dados para apresentar" : item.Cases.Total?.ToString("N0");
+
+                Console.WriteLine($"Continente: {continente}" +
+                                  $"\nPopulação: {populacao}" +
+                                  $"\nCasos" +
+                                  $"\n   Casos novos: {casosNovos}" +
+                                  $"\n   Casos ativos: {casosAtivos}" +
+                                  $"\n   Casos críticos: {casosCritico}" +
+                                  $"\n   Casos recuperados: {casosRecuperado}" +
+                                  $"\n   Casos totais: {casosTotais}" +
+                                  $"\n   Casos por 1M de pessoas: {casos1mPessoas}" +
+                                  $"\nMortes:\n{item.Deaths}" +
+                                  $"\nTestes:\n{item.Tests}\n");
+            }
+
         }
     }
 }

@@ -6,7 +6,7 @@ namespace APICovid
 {
     public class StatisticsResponse
     {
-        public string? Continent { get; set; }
+        public string Continent { get; set; }
         public string Country { get; set; }
         public int? Population { get; set; }//? inteiro ou nulo
         public CaseResponse Cases { get; set; }
