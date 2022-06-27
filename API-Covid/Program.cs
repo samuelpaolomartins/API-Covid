@@ -507,9 +507,20 @@ namespace APICovid
             //somar as informações necessárias
             //printar as informações
 
-            StatisticsModel info = await GetEstatistica(continent);            
+            StatisticsModel info = await GetEstatistica();
 
             foreach (var item in info.Response)
+            {
+                if (continent == item.Continent && continent != item.Country)
+                {
+                    string populacao = item.Population == null ? "Sem dados para apresentar" : item.Population?.ToString("N0");
+                    
+                    Console.WriteLine(populacao);
+                }
+            }
+
+
+            /*foreach (var item in info.Response)
             {
                 string continente = item.Continent;
                 string populacao = item.Population == null ? "Sem dados para apresentar" : item.Population?.ToString("N0");
@@ -531,7 +542,7 @@ namespace APICovid
                                   $"\n   Casos por 1M de pessoas: {casos1mPessoas}" +
                                   $"\nMortes:\n{item.Deaths}" +
                                   $"\nTestes:\n{item.Tests}\n");
-            }
+            }*/
 
         }
     }
