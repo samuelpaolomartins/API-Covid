@@ -13,15 +13,13 @@ namespace APICovid
     {
         static async Task Main(string[] args)
         {
-            /*var list = new List<string>{ "abc", "abc", "def", "ghi", "def" };
-            var distinct = list.Distinct().ToList();
+            /*var list = new List<string> { "abc", "abc", "def", "ghi", "def" };
 
-
-            foreach (var item in distinct)
+            foreach (var item in list)
             {
                 Console.WriteLine(item);
             }
-
+            
             Console.ReadKey();
             return;*/
 
@@ -485,14 +483,23 @@ namespace APICovid
         static async Task GetContinents()
         {
             StatisticsModel info = await GetEstatistica();
-            /*StatisticsResponse[] retirarRepeticao = info.Response.Distinct().ToArray();*/
 
-            var list = new List<string> ();
-
+            var list = new List<string>();
+            int posicao = 1;
             foreach (var item in info.Response)
             {
-                list.Add(item.Continent);
-                //Console.WriteLine(distinct);
+                // Só vai inserir na list caso o continente não esteja na list
+                if (!list.Contains(item.Continent))
+                {
+                    if (string.IsNullOrEmpty(item.Continent) || item.Continent == "All")
+                    {
+                        continue; //pula pra próx interação do foreach
+                    }
+
+                    list.Add(item.Continent);
+                    Console.WriteLine($"{posicao} - {item.Continent}");
+                    posicao++;
+                }
             }
         }
     }
