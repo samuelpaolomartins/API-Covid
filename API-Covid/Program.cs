@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Globalization;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace APICovid
@@ -13,16 +12,6 @@ namespace APICovid
     {
         static async Task Main(string[] args)
         {
-            /*var list = new List<string> { "abc", "abc", "def", "ghi", "def" };
-
-            foreach (var item in list)
-            {
-                Console.WriteLine(item);
-            }
-            
-            Console.ReadKey();
-            return;*/
-
             while (true)
             {
                 Console.Write("Você deseja" +
@@ -509,41 +498,75 @@ namespace APICovid
 
             StatisticsModel info = await GetEstatistica();
 
+            int? somapop = 0;
+            int? somanovos = 0;
+            int? somaativo = 0;
+            int? somacritico = 0;
+            int? somarecuperado = 0;
+            double? somacaso1M = 0;
+            int? somacasototal = 0;
+
+            int? somamortesnovas = 0;
+            double? somamortes1M = 0;
+            int? somamortestotais = 0;
+
+            double? somatestes1M = 0;
+            int? somatestetotais = 0;
+
             foreach (var item in info.Response)
             {
                 if (continent == item.Continent && continent != item.Country)
                 {
-                    string populacao = item.Population == null ? "Sem dados para apresentar" : item.Population?.ToString("N0");
-                    
-                    Console.WriteLine(populacao);
+                    //string populacao = item.Population == null ? "Sem dados para apresentar" : item.Population?.ToString("N0");
+
+                    int? pop = item.Population;
+                    int? casonovo = item.Cases.New == null ? 0 : item.Cases.New;
+                    int? casoativo = item.Cases.Active == null ? 0 : item.Cases.Active;
+                    int? casocritico = item.Cases.Critical == null ? 0 : item.Cases.Critical;
+                    int? casorecuperado = item.Cases.Recovered == null ? 0 : item.Cases.Recovered;
+                    double? caso1Mpes = item.Cases.M1Pop == null ? 0 : item.Cases.M1Pop;
+                    int? casototal = item.Cases.Total == null ? 0 : item.Cases.Total;
+
+                    int? mortenova = item.Deaths.New == null ? 0 : item.Deaths.New;
+                    double? morte1Mpes = item.Deaths.M1Pop == null ? 0 : item.Deaths.M1Pop;
+                    int? mortetotais = item.Deaths.Total == null ? 0 : item.Deaths.Total;
+
+                    double? teste1Mpes = item.Tests.M_pop == null ? 0 : item.Tests.M_pop;
+                    int? testetotal = item.Tests.Total == null ? 0 : item.Tests.Total;
+
+                    somapop += pop;
+                    somanovos += casonovo;
+                    somaativo += casoativo;
+                    somacritico += casocritico;
+                    somarecuperado += casorecuperado;
+                    somacaso1M += caso1Mpes;
+                    somacasototal += casototal;
+
+                    somamortesnovas += mortenova;
+                    somamortes1M += morte1Mpes;
+                    somamortestotais += mortetotais;
+
+                    somatestes1M += teste1Mpes;
+                    somatestetotais += testetotal;
                 }
+
             }
-
-
-            /*foreach (var item in info.Response)
-            {
-                string continente = item.Continent;
-                string populacao = item.Population == null ? "Sem dados para apresentar" : item.Population?.ToString("N0");
-                string casosNovos = item.Cases.New == null ? "Sem dados para apresentar" : item.Cases.New?.ToString("N0");
-                string casosAtivos = item.Cases.Active == null ? "Sem dados para apresentar" : item.Cases.Active?.ToString("N0");
-                string casosCritico = item.Cases.Critical == null ? "Sem dados para apresentar" : item.Cases.Critical?.ToString("N0");
-                string casosRecuperado = item.Cases.Recovered == null ? "Sem dados para apresentar" : item.Cases.Recovered?.ToString("N0");
-                string casos1mPessoas = item.Cases.M1Pop == null ? "Sem dados para apresentar" : item.Cases.M1Pop?.ToString("N0");
-                string casosTotais = item.Cases.Total == null ? "Sem dados para apresentar" : item.Cases.Total?.ToString("N0");
-
-                Console.WriteLine($"Continente: {continente}" +
-                                  $"\nPopulação: {populacao}" +
-                                  $"\nCasos" +
-                                  $"\n   Casos novos: {casosNovos}" +
-                                  $"\n   Casos ativos: {casosAtivos}" +
-                                  $"\n   Casos críticos: {casosCritico}" +
-                                  $"\n   Casos recuperados: {casosRecuperado}" +
-                                  $"\n   Casos totais: {casosTotais}" +
-                                  $"\n   Casos por 1M de pessoas: {casos1mPessoas}" +
-                                  $"\nMortes:\n{item.Deaths}" +
-                                  $"\nTestes:\n{item.Tests}\n");
-            }*/
-
+            Console.WriteLine($"\nContinente: {continent}" +
+                                      $"\nPopulação total: {somapop?.ToString("N0")}" +
+                                      $"\nCASOS" +
+                                      $"\n   Casos novos totais: {somanovos?.ToString("N0")}" +
+                                      $"\n   Casos ativos totais: {somaativo?.ToString("N0")}" +
+                                      $"\n   Casos criticos totais: {somacritico?.ToString("N0")}" +
+                                      $"\n   Casos recuperados totais: {somarecuperado?.ToString("N0")}" +
+                                      $"\n   Casos por 1M de possoas totais: {somacaso1M?.ToString("N0")}" +
+                                      $"\n   Casos totais: {somacasototal?.ToString("N0")}" +
+                                      $"\nMORTES" +
+                                      $"\n    Mortes novas totais: {somamortesnovas?.ToString("N0")}" +
+                                      $"\n    Mortes por 1M pessoas totais: {somamortes1M?.ToString("N0")}" +
+                                      $"\n    Mortes totais: {somamortestotais?.ToString("N0")}" +
+                                      $"\nTESTES" +
+                                      $"\n   Testes por 1m pessoas totais: {somatestes1M?.ToString("N0")}" +
+                                      $"\n   Testes totais: {somatestetotais?.ToString("N0")}\n");
         }
     }
 }
