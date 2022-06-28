@@ -483,15 +483,6 @@ namespace APICovid
             }
 
             string continenteEscolhido = list[continente - 1];
-            await ShowContinentValues(continenteEscolhido);
-        }
-        static async Task ShowContinentValues(string continent)
-        {
-            //pegar a informação do continente selecionado
-            //somar as informações necessárias
-            //printar as informações
-
-            StatisticsModel info = await GetEstatistica();
 
             int somapop = 0;
             int somanovos = 0;
@@ -510,7 +501,7 @@ namespace APICovid
 
             foreach (var item in info.Response)
             {
-                if (continent == item.Continent && continent != item.Country)
+                if (continenteEscolhido == item.Continent && continenteEscolhido != item.Country)
                 {
                     int pop = item.Population.HasValue ? item.Population.Value : 0; //hasvalue verifica se possui valor diferente de nulo, se sim pega o valor de population.value, se não pega  valor 0
                     int casonovo = item.Cases.New ?? 0; // se item.case.new for nulo pega o valor 0, se não pega o valor de item.case.new
@@ -544,7 +535,7 @@ namespace APICovid
                 }
 
             }
-            Console.WriteLine($"\nContinente: {continent}" +
+            Console.WriteLine($"\nContinente: {continenteEscolhido}" +
                                       $"\nPopulação total: {somapop.ToString("N0")}" +
                                       $"\nCASOS" +
                                       $"\n   Casos novos totais: {somanovos.ToString("N0")}" +
@@ -561,5 +552,81 @@ namespace APICovid
                                       $"\n   Testes por 1M pessoas totais: {somatestes1M.ToString("N0")}" +
                                       $"\n   Testes totais: {somatestetotais.ToString("N0")}\n");
         }
+        /*static async Task ShowContinentValues(string continent)
+        {
+            //pegar a informação do continente selecionado
+            //somar as informações necessárias
+            //printar as informações
+
+            StatisticsModel info = await GetEstatistica();
+
+            int somapop = 0;
+            int somanovos = 0;
+            int somaativo = 0;
+            int somacritico = 0;
+            int somarecuperado = 0;
+            double somacaso1M = 0;
+            int somacasototal = 0;
+
+            int somamortesnovas = 0;
+            double somamortes1M = 0;
+            int somamortestotais = 0;
+
+            double somatestes1M = 0;
+            int somatestetotais = 0;
+
+            foreach (var item in info.Response)
+            {
+                if (continenteEscolhido == item.Continent && continenteEscolhido != item.Country)
+                {
+                    int pop = item.Population.HasValue ? item.Population.Value : 0; //hasvalue verifica se possui valor diferente de nulo, se sim pega o valor de population.value, se não pega  valor 0
+                    int casonovo = item.Cases.New ?? 0; // se item.case.new for nulo pega o valor 0, se não pega o valor de item.case.new
+                    int casoativo = item.Cases.Active.HasValue ? item.Cases.Active.Value : 0;
+                    int casocritico = item.Cases.Critical ?? 0;
+                    int casorecuperado = item.Cases.Recovered ?? 0;
+                    double caso1Mpes = item.Cases.M1Pop ?? 0;
+                    int casototal = item.Cases.Total ?? 0;
+
+                    int mortenova = item.Deaths.New ?? 0;
+                    double morte1Mpes = item.Deaths.M1Pop ?? 0;
+                    int mortetotais = item.Deaths.Total ?? 0;
+
+                    double teste1Mpes = item.Tests.M_pop ?? 0;
+                    int testetotal = item.Tests.Total ?? 0;
+
+                    somapop += pop;
+                    somanovos += casonovo;
+                    somaativo += casoativo;
+                    somacritico += casocritico;
+                    somarecuperado += casorecuperado;
+                    somacaso1M += caso1Mpes;
+                    somacasototal += casototal;
+
+                    somamortesnovas += mortenova;
+                    somamortes1M += morte1Mpes;
+                    somamortestotais += mortetotais;
+
+                    somatestes1M += teste1Mpes;
+                    somatestetotais += testetotal;
+                }
+
+            }
+            Console.WriteLine($"\nContinente: {continenteEscolhido}" +
+                                      $"\nPopulação total: {somapop.ToString("N0")}" +
+                                      $"\nCASOS" +
+                                      $"\n   Casos novos totais: {somanovos.ToString("N0")}" +
+                                      $"\n   Casos ativos totais: {somaativo.ToString("N0")}" +
+                                      $"\n   Casos criticos totais: {somacritico.ToString("N0")}" +
+                                      $"\n   Casos recuperados totais: {somarecuperado.ToString("N0")}" +
+                                      $"\n   Casos por 1M de possoas totais: {somacaso1M.ToString("N0")}" +
+                                      $"\n   Casos totais: {somacasototal.ToString("N0")}" +
+                                      $"\nMORTES" +
+                                      $"\n    Mortes novas totais: {somamortesnovas.ToString("N0")}" +
+                                      $"\n    Mortes por 1M pessoas totais: {somamortes1M.ToString("N0")}" +
+                                      $"\n    Mortes totais: {somamortestotais.ToString("N0")}" +
+                                      $"\nTESTES" +
+                                      $"\n   Testes por 1M pessoas totais: {somatestes1M.ToString("N0")}" +
+                                      $"\n   Testes totais: {somatestetotais.ToString("N0")}\n");
+        }*/
     }
 }
