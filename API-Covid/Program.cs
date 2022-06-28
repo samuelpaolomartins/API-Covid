@@ -8,6 +8,12 @@ using System.Collections.Generic;
 
 namespace APICovid
 {
+    // Métodos da API em classe separada
+    // Constantes para a parte de da URL e para a KEY
+    // Precisa duas requisições para listar os dados do continente?
+    // O que acontece se eu escolher um número de continente que não existe?
+
+
     internal class Program
     {
         static async Task Main(string[] args)
@@ -22,7 +28,8 @@ namespace APICovid
                 "\n5 - Visualizar os dados do mundo todo e" +
                 "\n6 - Visualizar os dados do munddo em uma data específica" +
                 "\n7 - Visualizar dados dos continentes" +
-                "\n8 - Parar aplicação" +
+                "\n8 - Ranking dos 10 países que mais houveram casos totais, casos recuperados, mortes e testes totais" +
+                "\n9 - Parar aplicação" +
                 "\nDigite uma opção:");
 
                 int escolher;
@@ -44,7 +51,6 @@ namespace APICovid
                         await MostrarPais();
                         Console.WriteLine();
                         break;
-
                     case Opcoes.PesquisarPais:
                         {
                             while (true)
@@ -62,7 +68,6 @@ namespace APICovid
                             }
                             break;
                         }
-
                     case Opcoes.VisualizarDadosPais:
                         {
                             while (true)
@@ -80,7 +85,6 @@ namespace APICovid
                             }
                             break;
                         }
-
                     case Opcoes.VisualizarDadosPaisData:
                         {
                             while (true)
@@ -96,7 +100,6 @@ namespace APICovid
                             }
                             break;
                         }
-
                     case Opcoes.VisualizarDadosMundo:
                         {
                             Console.WriteLine("Lista das estatísticas do mundo:");
@@ -105,7 +108,6 @@ namespace APICovid
                             Console.WriteLine();
                             break;
                         }
-
                     case Opcoes.VisualizarDadosMundoData:
                         {
                             while (true)
@@ -141,8 +143,6 @@ namespace APICovid
                         }
                     case Opcoes.PesquisaContinente:
                         {
-                            //await GetContinents();
-
                             var listaContinente = await GetContinents();
 
                             Console.Write("\nEscolha um continente para ver os dados: ");
@@ -158,7 +158,9 @@ namespace APICovid
                             await ShowContinentValues(continenteSelecionado);
                         }
                         break;
-
+                    case Opcoes.VisualizarRanking:
+                        await Ranking();
+                        break;
                     default:
                         Console.WriteLine("Opção não existe");
                         break;
@@ -498,20 +500,20 @@ namespace APICovid
 
             StatisticsModel info = await GetEstatistica();
 
-            int? somapop = 0;
-            int? somanovos = 0;
-            int? somaativo = 0;
-            int? somacritico = 0;
-            int? somarecuperado = 0;
-            double? somacaso1M = 0;
-            int? somacasototal = 0;
+            int somapop = 0;
+            int somanovos = 0;
+            int somaativo = 0;
+            int somacritico = 0;
+            int somarecuperado = 0;
+            double somacaso1M = 0;
+            int somacasototal = 0;
 
-            int? somamortesnovas = 0;
-            double? somamortes1M = 0;
-            int? somamortestotais = 0;
+            int somamortesnovas = 0;
+            double somamortes1M = 0;
+            int somamortestotais = 0;
 
-            double? somatestes1M = 0;
-            int? somatestetotais = 0;
+            double somatestes1M = 0;
+            int somatestetotais = 0;
 
             foreach (var item in info.Response)
             {
@@ -519,20 +521,20 @@ namespace APICovid
                 {
                     //string populacao = item.Population == null ? "Sem dados para apresentar" : item.Population?.ToString("N0");
 
-                    int? pop = item.Population;
-                    int? casonovo = item.Cases.New == null ? 0 : item.Cases.New;
-                    int? casoativo = item.Cases.Active == null ? 0 : item.Cases.Active;
-                    int? casocritico = item.Cases.Critical == null ? 0 : item.Cases.Critical;
-                    int? casorecuperado = item.Cases.Recovered == null ? 0 : item.Cases.Recovered;
-                    double? caso1Mpes = item.Cases.M1Pop == null ? 0 : item.Cases.M1Pop;
-                    int? casototal = item.Cases.Total == null ? 0 : item.Cases.Total;
+                    int pop = item.Population.HasValue ? item.Population.Value : 0; //hasvalue verifica se possui valor diferente de nulo, se sim pega o valor de population.value, se não pega  valor 0
+                    int casonovo = item.Cases.New ?? 0; // se item.case.new for nulo pega o valor 0, se não pega o valor de item.case.new
+                    int casoativo = item.Cases.Active.HasValue ? item.Cases.Active.Value : 0;
+                    int casocritico = item.Cases.Critical ?? 0;
+                    int casorecuperado = item.Cases.Recovered ?? 0;
+                    double caso1Mpes = item.Cases.M1Pop ?? 0;
+                    int casototal = item.Cases.Total ?? 0;
 
-                    int? mortenova = item.Deaths.New == null ? 0 : item.Deaths.New;
-                    double? morte1Mpes = item.Deaths.M1Pop == null ? 0 : item.Deaths.M1Pop;
-                    int? mortetotais = item.Deaths.Total == null ? 0 : item.Deaths.Total;
+                    int mortenova = item.Deaths.New ?? 0;
+                    double morte1Mpes = item.Deaths.M1Pop ?? 0;
+                    int mortetotais = item.Deaths.Total ?? 0;
 
-                    double? teste1Mpes = item.Tests.M_pop == null ? 0 : item.Tests.M_pop;
-                    int? testetotal = item.Tests.Total == null ? 0 : item.Tests.Total;
+                    double teste1Mpes = item.Tests.M_pop ?? 0;
+                    int testetotal = item.Tests.Total ?? 0;
 
                     somapop += pop;
                     somanovos += casonovo;
@@ -552,21 +554,30 @@ namespace APICovid
 
             }
             Console.WriteLine($"\nContinente: {continent}" +
-                                      $"\nPopulação total: {somapop?.ToString("N0")}" +
+                                      $"\nPopulação total: {somapop.ToString("N0")}" +
                                       $"\nCASOS" +
-                                      $"\n   Casos novos totais: {somanovos?.ToString("N0")}" +
-                                      $"\n   Casos ativos totais: {somaativo?.ToString("N0")}" +
-                                      $"\n   Casos criticos totais: {somacritico?.ToString("N0")}" +
-                                      $"\n   Casos recuperados totais: {somarecuperado?.ToString("N0")}" +
-                                      $"\n   Casos por 1M de possoas totais: {somacaso1M?.ToString("N0")}" +
-                                      $"\n   Casos totais: {somacasototal?.ToString("N0")}" +
+                                      $"\n   Casos novos totais: {somanovos.ToString("N0")}" +
+                                      $"\n   Casos ativos totais: {somaativo.ToString("N0")}" +
+                                      $"\n   Casos criticos totais: {somacritico.ToString("N0")}" +
+                                      $"\n   Casos recuperados totais: {somarecuperado.ToString("N0")}" +
+                                      $"\n   Casos por 1M de possoas totais: {somacaso1M.ToString("N0")}" +
+                                      $"\n   Casos totais: {somacasototal.ToString("N0")}" +
                                       $"\nMORTES" +
-                                      $"\n    Mortes novas totais: {somamortesnovas?.ToString("N0")}" +
-                                      $"\n    Mortes por 1M pessoas totais: {somamortes1M?.ToString("N0")}" +
-                                      $"\n    Mortes totais: {somamortestotais?.ToString("N0")}" +
+                                      $"\n    Mortes novas totais: {somamortesnovas.ToString("N0")}" +
+                                      $"\n    Mortes por 1M pessoas totais: {somamortes1M.ToString("N0")}" +
+                                      $"\n    Mortes totais: {somamortestotais.ToString("N0")}" +
                                       $"\nTESTES" +
-                                      $"\n   Testes por 1m pessoas totais: {somatestes1M?.ToString("N0")}" +
-                                      $"\n   Testes totais: {somatestetotais?.ToString("N0")}\n");
+                                      $"\n   Testes por 1M pessoas totais: {somatestes1M.ToString("N0")}" +
+                                      $"\n   Testes totais: {somatestetotais.ToString("N0")}\n");
+        }
+        static async Task Ranking()
+        {
+            StatisticsModel info = await GetEstatistica();
+
+            foreach (var item in info.Response)
+            {
+
+            }
         }
     }
 }
