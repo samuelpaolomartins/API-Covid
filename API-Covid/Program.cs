@@ -9,13 +9,11 @@ using System.Collections.Generic;
 namespace APICovid
 {
     // Métodos da API em classe separada
-    // Constantes para a parte de da URL e para a KEY
-    // Precisa duas requisições para listar os dados do continente?
-    // O que acontece se eu escolher um número de continente que não existe?
-
 
     internal class Program
     {
+        private static string Url = "https://covid-193.p.rapidapi.com";
+        private static string Key = "d7a0543448mshd4c0461dfd90571p149c59jsn063447df72e7";
         static async Task Main(string[] args)
         {
             while (true)
@@ -35,9 +33,7 @@ namespace APICovid
                 int escolher;
 
                 while (!int.TryParse(Console.ReadLine(), out escolher))
-                {
                     Console.Write("Insira uma opção válida: ");
-                }
 
                 Opcoes opcao = (Opcoes)escolher;
 
@@ -142,24 +138,7 @@ namespace APICovid
                             break;
                         }
                     case Opcoes.PesquisaContinente:
-                        {
-                            var listaContinente = await GetContinents();
-
-                            Console.Write("\nEscolha um continente para ver os dados: ");
-
-                            int continente;
-
-                            while (!int.TryParse(Console.ReadLine(), out continente))
-                            {
-                                Console.Write("Digite um valor válido: ");
-                            }
-
-                            string continenteSelecionado = listaContinente[continente - 1];
-                            await ShowContinentValues(continenteSelecionado);
-                        }
-                        break;
-                    case Opcoes.VisualizarRanking:
-                        await Ranking();
+                        await GetContinents();
                         break;
                     default:
                         Console.WriteLine("Opção não existe");
@@ -171,7 +150,7 @@ namespace APICovid
         {
             var client = new HttpClient();
 
-            var url = "https://covid-193.p.rapidapi.com/countries";
+            var url = Url + "/countries";
 
             if (!string.IsNullOrEmpty(country))
                 url += $"?search={country}";
@@ -182,7 +161,7 @@ namespace APICovid
                 RequestUri = new Uri(url),
                 Headers =
                 {
-                    { "X-RapidAPI-Key", "d7a0543448mshd4c0461dfd90571p149c59jsn063447df72e7" },
+                    { "X-RapidAPI-Key", Key },
                     { "X-RapidAPI-Host", "covid-193.p.rapidapi.com" },
                 },
             };
@@ -245,7 +224,7 @@ namespace APICovid
         {
             var client = new HttpClient();
 
-            var url = "https://covid-193.p.rapidapi.com/statistics";
+            var url = Url + "/statistics";
 
             if (!string.IsNullOrEmpty(country))
                 url += $"?country={country}";
@@ -256,7 +235,7 @@ namespace APICovid
                 RequestUri = new Uri(url),
                 Headers =
                 {
-                    { "X-RapidAPI-Key", "d7a0543448mshd4c0461dfd90571p149c59jsn063447df72e7" },
+                    { "X-RapidAPI-Key", Key },
                     { "X-RapidAPI-Host", "covid-193.p.rapidapi.com" },
                 },
             };
@@ -309,7 +288,7 @@ namespace APICovid
         {
             var client = new HttpClient();
 
-            var url = "https://covid-193.p.rapidapi.com/history";
+            var url = Url + "/history";
 
             if (!string.IsNullOrEmpty(country))
             {
@@ -327,7 +306,7 @@ namespace APICovid
                 RequestUri = new Uri(url),
                 Headers =
                 {
-                    { "X-RapidAPI-Key", "d7a0543448mshd4c0461dfd90571p149c59jsn063447df72e7" },
+                    { "X-RapidAPI-Key", Key },
                     { "X-RapidAPI-Host", "covid-193.p.rapidapi.com" },
                 },
             };
@@ -468,7 +447,7 @@ namespace APICovid
             return;
 
         }
-        static async Task<List<string>> GetContinents()
+        static async Task GetContinents()
         {
             StatisticsModel info = await GetEstatistica();
 
@@ -490,7 +469,21 @@ namespace APICovid
                 }
             }
 
-            return list;
+            Console.Write("\nEscolha um continente para ver os dados: ");
+
+            int continente;
+
+            while (!int.TryParse(Console.ReadLine(), out continente))
+                Console.Write("Digite um valor válido: ");
+
+            if (continente >= list.Capacity - 1 || continente < 0)
+            {
+                Console.Write("Digite uma valor válido: ");
+                return;
+            }
+
+            string continenteEscolhido = list[continente - 1];
+            await ShowContinentValues(continenteEscolhido);
         }
         static async Task ShowContinentValues(string continent)
         {
@@ -519,8 +512,6 @@ namespace APICovid
             {
                 if (continent == item.Continent && continent != item.Country)
                 {
-                    //string populacao = item.Population == null ? "Sem dados para apresentar" : item.Population?.ToString("N0");
-
                     int pop = item.Population.HasValue ? item.Population.Value : 0; //hasvalue verifica se possui valor diferente de nulo, se sim pega o valor de population.value, se não pega  valor 0
                     int casonovo = item.Cases.New ?? 0; // se item.case.new for nulo pega o valor 0, se não pega o valor de item.case.new
                     int casoativo = item.Cases.Active.HasValue ? item.Cases.Active.Value : 0;
@@ -569,15 +560,6 @@ namespace APICovid
                                       $"\nTESTES" +
                                       $"\n   Testes por 1M pessoas totais: {somatestes1M.ToString("N0")}" +
                                       $"\n   Testes totais: {somatestetotais.ToString("N0")}\n");
-        }
-        static async Task Ranking()
-        {
-            StatisticsModel info = await GetEstatistica();
-
-            foreach (var item in info.Response)
-            {
-
-            }
         }
     }
 }
