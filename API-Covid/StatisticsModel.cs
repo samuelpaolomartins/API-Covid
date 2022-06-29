@@ -4,7 +4,7 @@ using System.Text;
 
 namespace APICovid
 {
-    internal class StatisticsModel
+    public class StatisticsModel
     {
         public StatisticsResponse[] Response { get; set; }
     }

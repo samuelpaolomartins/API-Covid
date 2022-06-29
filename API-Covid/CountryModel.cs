@@ -4,7 +4,7 @@ using System.Text;
 
 namespace APICovid
 {
-    internal class CountryModel
+    public class CountryModel
     {
         public string[] Response { get; set; }
         public int Results { get; set; }
