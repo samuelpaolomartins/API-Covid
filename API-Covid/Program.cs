@@ -480,12 +480,12 @@ namespace APICovid
             {
                 case Opcoes2.CasoTotal:
                     {
-                        //casos totais
-                        int[] maiores = new int[10];
-                        string[] pais = new string[10];
+                        InfoResponse[] valores = new InfoResponse[10];
 
-                        for (int i = 0; i < maiores.Length; i++)
+                        for (int i = 0; i < valores.Length; i++)
                         {
+                            valores[i] = new InfoResponse();
+
                             for (int j = 0; j < info.Response.Length; j++)
                             {
                                 var item = info.Response[j];
@@ -495,35 +495,35 @@ namespace APICovid
                                     if (item.Cases.Total == null)
                                         continue;
 
-                                    if (i == 0 && maiores[i] < item.Cases.Total)
+
+                                    if (i == 0 && valores[i].Dados < item.Cases.Total)
                                     {
-                                        maiores[i] = item.Cases.Total.Value;
-                                        pais[i] = info.Response[j].Country;
+                                        valores[i].Dados = item.Cases.Total.Value;
+                                        valores[i].Pais = info.Response[j].Country;
                                     }
 
-                                    if (i > 0 && maiores[i - 1] > item.Cases.Total && maiores[i] < item.Cases.Total)
+                                    if (i > 0 && valores[i - 1].Dados > item.Cases.Total && valores[i].Dados < item.Cases.Total)
                                     {
-                                        maiores[i] = item.Cases.Total.Value;
-                                        pais[i] = info.Response[j].Country;
+                                        valores[i].Dados = item.Cases.Total.Value;
+                                        valores[i].Pais = info.Response[j].Country;
                                     }
                                 }
                             }
                         }
-                        for (int i = 0; i < maiores.Length; i++)
+                        for (int i = 0; i < valores.Length; i++)
                         {
-                            Console.WriteLine($"Casos totais: {maiores[i]} do país: {pais[i]}");
+                            Console.WriteLine($"Casos totais: {valores[i].Dados} do país: {valores[i].Pais}");
                         }
                     }
                     break;
                 case Opcoes2.CasoRecuperado:
                     {
-                        //casos recuperados
-                        int[] maiores = new int[10];
-                        string[] pais = new string[10];
+                        InfoResponse[] valores = new InfoResponse[10];
 
-                        //for pega o maior nº
-                        for (int i = 0; i < maiores.Length; i++)
+                        for (int i = 0; i < valores.Length; i++)
                         {
+                            valores[i] = new InfoResponse();
+
                             for (int j = 0; j < info.Response.Length; j++)
                             {
                                 var item = info.Response[j];
@@ -533,35 +533,35 @@ namespace APICovid
                                     if (item.Cases.Recovered == null)
                                         continue;
 
-                                    if (i == 0 && maiores[i] < item.Cases.Recovered)
+                                    if (i == 0 && valores[i].Dados < item.Cases.Recovered)
                                     {
-                                        maiores[i] = item.Cases.Recovered.Value;
-                                        pais[i] = info.Response[j].Country;
+                                        valores[i].Dados = item.Cases.Recovered.Value;
+                                        valores[i].Pais = info.Response[j].Country;
                                     }
 
-                                    if (i > 0 && maiores[i - 1] > item.Cases.Recovered && maiores[i] < item.Cases.Recovered)
+                                    if (i > 0 && valores[i - 1].Dados > item.Cases.Recovered && valores[i].Dados < item.Cases.Recovered)
                                     {
-                                        maiores[i] = item.Cases.Recovered.Value;
-                                        pais[i] = info.Response[j].Country;
+                                        valores[i].Dados = item.Cases.Recovered.Value;
+                                        valores[i].Pais = info.Response[j].Country;
                                     }
                                 }
                             }
                         }
-                        for (int i = 0; i < maiores.Length; i++)
+                        for (int i = 0; i < valores.Length; i++)
                         {
-                            Console.WriteLine($"Casos recuperdaos: {maiores[i]} do país: {pais[i]}");
+                            Console.WriteLine($"Casos recuperdaos: {valores[i].Dados} do país: {valores[i].Pais}");
                         }
                     }
                     break;
                 case Opcoes2.MorteTotal:
                     {
-                        //mortes totais
-                        int[] maiores = new int[10];
-                        string[] pais = new string[10];
+                        InfoResponse[] valores = new InfoResponse[10];
 
                         //for pega o maior nº
-                        for (int i = 0; i < maiores.Length; i++)
+                        for (int i = 0; i < valores.Length; i++)
                         {
+                            valores[i] = new InfoResponse();
+
                             for (int j = 0; j < info.Response.Length; j++)
                             {
                                 var item = info.Response[j];
@@ -571,35 +571,35 @@ namespace APICovid
                                     if (item.Deaths.Total == null)
                                         continue;
 
-                                    if (i == 0 && maiores[i] < item.Deaths.Total)
+                                    if (i == 0 && valores[i].Dados < item.Deaths.Total)
                                     {
-                                        maiores[i] = item.Deaths.Total.Value;
-                                        pais[i] = info.Response[j].Country;
+                                        valores[i].Dados = item.Deaths.Total.Value;
+                                        valores[i].Pais = info.Response[j].Country;
                                     }
 
-                                    if (i > 0 && maiores[i - 1] > item.Deaths.Total && maiores[i] < item.Deaths.Total)
+                                    if (i > 0 && valores[i - 1].Dados > item.Deaths.Total && valores[i].Dados < item.Deaths.Total)
                                     {
-                                        maiores[i] = item.Deaths.Total.Value;
-                                        pais[i] = info.Response[j].Country;
+                                        valores[i].Dados = item.Deaths.Total.Value;
+                                        valores[i].Pais = info.Response[j].Country;
                                     }
                                 }
                             }
                         }
-                        for (int i = 0; i < maiores.Length; i++)
+                        for (int i = 0; i < valores.Length; i++)
                         {
-                            Console.WriteLine($"Mortes totais: {maiores[i]} do país: {pais[i]}");
+                            Console.WriteLine($"Mortes totais: {valores[i].Dados} do país: {valores[i].Pais}");
                         }
                     }
                     break;
                 case Opcoes2.TesteTotal:
                     {
-                        //testes totais
-                        int[] maiores = new int[10];
-                        string[] pais = new string[10];
+                        InfoResponse[] valores = new InfoResponse[10];
 
                         //for pega o maior nº
-                        for (int i = 0; i < maiores.Length; i++)
+                        for (int i = 0; i < valores.Length; i++)
                         {
+                            valores[i] = new InfoResponse();
+
                             for (int j = 0; j < info.Response.Length; j++)
                             {
                                 var item = info.Response[j];
@@ -609,23 +609,23 @@ namespace APICovid
                                     if (item.Tests.Total == null)
                                         continue;
 
-                                    if (i == 0 && maiores[i] < item.Tests.Total)
+                                    if (i == 0 && valores[i].Dados < item.Tests.Total)
                                     {
-                                        maiores[i] = item.Tests.Total.Value;
-                                        pais[i] = info.Response[j].Country;
+                                        valores[i].Dados = item.Tests.Total.Value;
+                                        valores[i].Pais = info.Response[j].Country;
                                     }
 
-                                    if (i > 0 && maiores[i - 1] > item.Tests.Total && maiores[i] < item.Tests.Total)
+                                    if (i > 0 && valores[i - 1].Dados > item.Tests.Total && valores[i].Dados < item.Tests.Total)
                                     {
-                                        maiores[i] = item.Tests.Total.Value;
-                                        pais[i] = info.Response[j].Country;
+                                        valores[i].Dados = item.Tests.Total.Value;
+                                        valores[i].Pais = info.Response[j].Country;
                                     }
                                 }
                             }
                         }
-                        for (int i = 0; i < maiores.Length; i++)
+                        for (int i = 0; i < valores.Length; i++)
                         {
-                            Console.WriteLine($"Casos recuperdaos: {maiores[i]} do país: {pais[i]}");
+                            Console.WriteLine($"Casos recuperdaos: {valores[i].Dados} do país: {valores[i].Pais}");
                         }
                     }
                     break;
