@@ -7,26 +7,8 @@ namespace APICovid
 {
     internal class Program
     {
-        // por milhão = total * 1000000 / populacao
-        //                    total * 1000000
-        // por milhão = --------------------------------
-        //                      populacao 
-
         static async Task Main(string[] args)
         {
-            /*int[] n1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-            int[] n = new int[10];
-
-            //int num = Convert.ToInt32(Console.ReadLine());
-
-            for (int i = 9; i >=0; i--)
-            {
-                Console.WriteLine(n1[i]);
-            }
-
-            Console.ReadKey();
-            return;
-*/
             while (true)
             {
                 Console.Write("Você deseja" +
