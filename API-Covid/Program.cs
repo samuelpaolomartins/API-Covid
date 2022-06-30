@@ -464,50 +464,174 @@ namespace APICovid
         }
         static async Task Ranking()
         {
-            string escolha = Console.ReadLine();
-
             Console.Write("1 - Casos totais" +
                           "\n2 - Casos recuperados" +
                           "\n3 - Mortes totais" +
                           "\n4 - Testes totais" +
                           "\nEsolha uma opção de ranking: ");
 
+            int escolha = Convert.ToInt32(Console.ReadLine());
+            Opcoes2 opcao = (Opcoes2)escolha;
+            Console.WriteLine();
+
             StatisticsModel info = await MetodosApi.GetEstatistica();
-            //casos recuperados
 
-            int[] maiores = new int[10];
-            string[] pais = new string[10];
-
-            //for pega o maior nº
-            for (int i = 0; i < maiores.Length; i++)
+            switch (opcao)
             {
-                for (int j = 0; j < info.Response.Length; j++)
-                {
-                    var item = info.Response[j];
-
-                    if(info.Response[j].Continent != info.Response[j].Country)
+                case Opcoes2.CasoTotal:
                     {
-                        if (item.Cases.Recovered == null)
-                            continue;
+                        //casos totais
+                        int[] maiores = new int[10];
+                        string[] pais = new string[10];
 
-                        if (i == 0 && maiores[i] < item.Cases.Recovered)
+                        for (int i = 0; i < maiores.Length; i++)
                         {
-                            maiores[i] = item.Cases.Recovered.Value;
-                            pais[i] = info.Response[j].Country;
+                            for (int j = 0; j < info.Response.Length; j++)
+                            {
+                                var item = info.Response[j];
+
+                                if (info.Response[j].Continent != info.Response[j].Country)
+                                {
+                                    if (item.Cases.Total == null)
+                                        continue;
+
+                                    if (i == 0 && maiores[i] < item.Cases.Total)
+                                    {
+                                        maiores[i] = item.Cases.Total.Value;
+                                        pais[i] = info.Response[j].Country;
+                                    }
+
+                                    if (i > 0 && maiores[i - 1] > item.Cases.Total && maiores[i] < item.Cases.Total)
+                                    {
+                                        maiores[i] = item.Cases.Total.Value;
+                                        pais[i] = info.Response[j].Country;
+                                    }
+                                }
+                            }
                         }
-
-                        if (i > 0 && maiores[i - 1] > item.Cases.Recovered && maiores[i] < item.Cases.Recovered)
+                        for (int i = 0; i < maiores.Length; i++)
                         {
-                            maiores[i] = item.Cases.Recovered.Value;
-                            pais[i] = info.Response[j].Country;
+                            Console.WriteLine($"Casos totais: {maiores[i]} do país: {pais[i]}");
                         }
                     }
-                }
-            }
+                    break;
+                case Opcoes2.CasoRecuperado:
+                    {
+                        //casos recuperados
+                        int[] maiores = new int[10];
+                        string[] pais = new string[10];
 
-            for (int i = 0; i < maiores.Length; i++)
-            {
-                Console.WriteLine($" Casos recuperdaos: {maiores[i]} do país: {pais[i]}");
+                        //for pega o maior nº
+                        for (int i = 0; i < maiores.Length; i++)
+                        {
+                            for (int j = 0; j < info.Response.Length; j++)
+                            {
+                                var item = info.Response[j];
+
+                                if (info.Response[j].Continent != info.Response[j].Country)
+                                {
+                                    if (item.Cases.Recovered == null)
+                                        continue;
+
+                                    if (i == 0 && maiores[i] < item.Cases.Recovered)
+                                    {
+                                        maiores[i] = item.Cases.Recovered.Value;
+                                        pais[i] = info.Response[j].Country;
+                                    }
+
+                                    if (i > 0 && maiores[i - 1] > item.Cases.Recovered && maiores[i] < item.Cases.Recovered)
+                                    {
+                                        maiores[i] = item.Cases.Recovered.Value;
+                                        pais[i] = info.Response[j].Country;
+                                    }
+                                }
+                            }
+                        }
+                        for (int i = 0; i < maiores.Length; i++)
+                        {
+                            Console.WriteLine($"Casos recuperdaos: {maiores[i]} do país: {pais[i]}");
+                        }
+                    }
+                    break;
+                case Opcoes2.MorteTotal:
+                    {
+                        //mortes totais
+                        int[] maiores = new int[10];
+                        string[] pais = new string[10];
+
+                        //for pega o maior nº
+                        for (int i = 0; i < maiores.Length; i++)
+                        {
+                            for (int j = 0; j < info.Response.Length; j++)
+                            {
+                                var item = info.Response[j];
+
+                                if (info.Response[j].Continent != info.Response[j].Country)
+                                {
+                                    if (item.Deaths.Total == null)
+                                        continue;
+
+                                    if (i == 0 && maiores[i] < item.Deaths.Total)
+                                    {
+                                        maiores[i] = item.Deaths.Total.Value;
+                                        pais[i] = info.Response[j].Country;
+                                    }
+
+                                    if (i > 0 && maiores[i - 1] > item.Deaths.Total && maiores[i] < item.Deaths.Total)
+                                    {
+                                        maiores[i] = item.Deaths.Total.Value;
+                                        pais[i] = info.Response[j].Country;
+                                    }
+                                }
+                            }
+                        }
+                        for (int i = 0; i < maiores.Length; i++)
+                        {
+                            Console.WriteLine($"Mortes totais: {maiores[i]} do país: {pais[i]}");
+                        }
+                    }
+                    break;
+                case Opcoes2.TesteTotal:
+                    {
+                        //testes totais
+                        int[] maiores = new int[10];
+                        string[] pais = new string[10];
+
+                        //for pega o maior nº
+                        for (int i = 0; i < maiores.Length; i++)
+                        {
+                            for (int j = 0; j < info.Response.Length; j++)
+                            {
+                                var item = info.Response[j];
+
+                                if (info.Response[j].Continent != info.Response[j].Country)
+                                {
+                                    if (item.Tests.Total == null)
+                                        continue;
+
+                                    if (i == 0 && maiores[i] < item.Tests.Total)
+                                    {
+                                        maiores[i] = item.Tests.Total.Value;
+                                        pais[i] = info.Response[j].Country;
+                                    }
+
+                                    if (i > 0 && maiores[i - 1] > item.Tests.Total && maiores[i] < item.Tests.Total)
+                                    {
+                                        maiores[i] = item.Tests.Total.Value;
+                                        pais[i] = info.Response[j].Country;
+                                    }
+                                }
+                            }
+                        }
+                        for (int i = 0; i < maiores.Length; i++)
+                        {
+                            Console.WriteLine($"Casos recuperdaos: {maiores[i]} do país: {pais[i]}");
+                        }
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Opção não existe");
+                    break;
             }
         }
     }
