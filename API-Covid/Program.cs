@@ -464,136 +464,51 @@ namespace APICovid
         }
         static async Task Ranking()
         {
-            /*string escolha = Console.ReadLine();
+            string escolha = Console.ReadLine();
 
             Console.Write("1 - Casos totais" +
                           "\n2 - Casos recuperados" +
                           "\n3 - Mortes totais" +
                           "\n4 - Testes totais" +
-                          "\nEsolha uma opção de ranking: ");*/
+                          "\nEsolha uma opção de ranking: ");
 
             StatisticsModel info = await MetodosApi.GetEstatistica();
             //casos recuperados
 
             int[] maiores = new int[10];
-            //fazer outro for
+            string[] pais = new string[10];
 
             //for pega o maior nº
-            for (int i = 0; i < info.Response.Length; i++)
+            for (int i = 0; i < maiores.Length; i++)
             {
-                var item = info.Response[i];
+                for (int j = 0; j < info.Response.Length; j++)
+                {
+                    var item = info.Response[j];
 
-                if (item.Cases.Recovered == null)
-                    continue;
+                    if(info.Response[j].Continent != info.Response[j].Country)
+                    {
+                        if (item.Cases.Recovered == null)
+                            continue;
 
-                if (maiores[0] < item.Cases.Recovered)
-                    maiores[0] = item.Cases.Recovered.Value;
+                        if (i == 0 && maiores[i] < item.Cases.Recovered)
+                        {
+                            maiores[i] = item.Cases.Recovered.Value;
+                            pais[i] = info.Response[j].Country;
+                        }
 
-
-            }
-            for (int i = 0; i < info.Response.Length; i++)
-            {
-                var item = info.Response[i];
-
-                if (item.Cases.Recovered == null)
-                    continue;
-
-                if (maiores[0] > item.Cases.Recovered && maiores[1] < item.Cases.Recovered)
-                    maiores[1] = item.Cases.Recovered.Value;
-
-            }
-            for (int i = 0; i < info.Response.Length; i++)
-            {
-                var item = info.Response[i];
-
-                if (item.Cases.Recovered == null)
-                    continue;
-
-                if (maiores[1] > item.Cases.Recovered && maiores[2] < item.Cases.Recovered)
-                    maiores[2] = item.Cases.Recovered.Value;
-            }
-            for (int i = 0; i < info.Response.Length; i++)
-            {
-                var item = info.Response[i];
-
-                if (item.Cases.Recovered == null)
-                    continue;
-
-                if (maiores[2] > item.Cases.Recovered && maiores[3] < item.Cases.Recovered)
-                    maiores[3] = item.Cases.Recovered.Value;
-            }
-            for (int i = 0; i < info.Response.Length; i++)
-            {
-                var item = info.Response[i];
-
-                if (item.Cases.Recovered == null)
-                    continue;
-
-                if (maiores[3] > item.Cases.Recovered && maiores[4] < item.Cases.Recovered)
-                    maiores[4] = item.Cases.Recovered.Value;
-            }
-            for (int i = 0; i < info.Response.Length; i++)
-            {
-                var item = info.Response[i];
-
-                if (item.Cases.Recovered == null)
-                    continue;
-
-                if (maiores[4] > item.Cases.Recovered && maiores[5] < item.Cases.Recovered)
-                    maiores[5] = item.Cases.Recovered.Value;
-            }
-            for (int i = 0; i < info.Response.Length; i++)
-            {
-                var item = info.Response[i];
-
-                if (item.Cases.Recovered == null)
-                    continue;
-
-                if (maiores[5] > item.Cases.Recovered && maiores[6] < item.Cases.Recovered)
-                    maiores[6] = item.Cases.Recovered.Value;
-            }
-            for (int i = 0; i < info.Response.Length; i++)
-            {
-                var item = info.Response[i];
-
-                if (item.Cases.Recovered == null)
-                    continue;
-
-                if (maiores[6] > item.Cases.Recovered && maiores[7] < item.Cases.Recovered)
-                    maiores[7] = item.Cases.Recovered.Value;
-            }
-            for (int i = 0; i < info.Response.Length; i++)
-            {
-                var item = info.Response[i];
-
-                if (item.Cases.Recovered == null)
-                    continue;
-
-                if (maiores[7] > item.Cases.Recovered && maiores[8] < item.Cases.Recovered)
-                    maiores[8] = item.Cases.Recovered.Value;
-            }
-            for (int i = 0; i < info.Response.Length; i++)
-            {
-                var item = info.Response[i];
-
-                if (item.Cases.Recovered == null)
-                    continue;
-
-                if (maiores[8] > item.Cases.Recovered && maiores[9] < item.Cases.Recovered)
-                    maiores[9] = item.Cases.Recovered.Value;
+                        if (i > 0 && maiores[i - 1] > item.Cases.Recovered && maiores[i] < item.Cases.Recovered)
+                        {
+                            maiores[i] = item.Cases.Recovered.Value;
+                            pais[i] = info.Response[j].Country;
+                        }
+                    }
+                }
             }
 
             for (int i = 0; i < maiores.Length; i++)
             {
-                //maiores[i] = maiorNumero;
-                Console.WriteLine(maiores[i]);
+                Console.WriteLine($" Casos recuperdaos: {maiores[i]} do país: {pais[i]}");
             }
-
-            /*for (int i = 0; i < valores.Length; i++)
-            {
-                valores[i] = maiorNumero;
-                Console.WriteLine(valores[i]);
-            }*/
         }
     }
 }
