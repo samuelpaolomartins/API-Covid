@@ -1,15 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Net.Http;
+﻿using System;
 using System.Threading.Tasks;
-using System.Web;
 using System.Globalization;
 using System.Collections.Generic;
 
 namespace APICovid
 {
-    // Métodos da API em classe separada
-
     internal class Program
     {
         // por milhão = total * 1000000 / populacao
@@ -19,6 +14,19 @@ namespace APICovid
 
         static async Task Main(string[] args)
         {
+            /*int[] n1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+            int[] n = new int[10];
+
+            //int num = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 9; i >=0; i--)
+            {
+                Console.WriteLine(n1[i]);
+            }
+
+            Console.ReadKey();
+            return;
+*/
             while (true)
             {
                 Console.Write("Você deseja" +
@@ -142,6 +150,9 @@ namespace APICovid
                         }
                     case Opcoes.PesquisaContinente:
                         await GetContinents();
+                        break;
+                    case Opcoes.VisualizarRanking:
+                        await Ranking();
                         break;
                     default:
                         Console.WriteLine("Opção não existe");
@@ -357,7 +368,7 @@ namespace APICovid
         {
             StatisticsModel info = await MetodosApi.GetEstatistica();
 
-            var list = new List<string>(); //List<string>(var) list verificar Task<List<string>>
+            var list = new List<string>(); //List<string>(var) list
             int posicao = 1;
             foreach (var item in info.Response)
             {
@@ -365,9 +376,7 @@ namespace APICovid
                 if (!list.Contains(item.Continent))
                 {
                     if (string.IsNullOrEmpty(item.Continent) || item.Continent == "All")
-                    {
                         continue; //pula pra próx interação do foreach
-                    }
 
                     list.Add(item.Continent);
                     Console.WriteLine($"{posicao} - {item.Continent}");
@@ -390,17 +399,17 @@ namespace APICovid
 
             string continenteEscolhido = list[continente - 1];
 
-            double somapop = 0;
-            int somanovos = 0;
-            int somaativo = 0;
-            int somacritico = 0;
-            int somarecuperado = 0;
-            double somacasototal = 0;
+            double somaPop = 0;
+            int somaNovos = 0;
+            int somaAtivo = 0;
+            int somaCritico = 0;
+            int somaRecuperado = 0;
+            double somaCasoTotal = 0;
 
-            int somamortesnovas = 0;
-            double somamortestotais = 0;
+            int somaMortesNovas = 0;
+            double somaMortesTotais = 0;
 
-            double somatestetotais = 0;
+            double somaTesteTotais = 0;
 
             foreach (var item in info.Response)
             {
@@ -418,40 +427,173 @@ namespace APICovid
 
                     double testetotal = item.Tests.Total ?? 0;
 
-                    somapop += pop;
-                    somanovos += casonovo;
-                    somaativo += casoativo;
-                    somacritico += casocritico;
-                    somarecuperado += casorecuperado;
-                    somacasototal += casototal;
+                    somaPop += pop;
+                    somaNovos += casonovo;
+                    somaAtivo += casoativo;
+                    somaCritico += casocritico;
+                    somaRecuperado += casorecuperado;
+                    somaCasoTotal += casototal;
 
-                    somamortesnovas += mortenova;
-                    somamortestotais += mortetotais;
+                    somaMortesNovas += mortenova;
+                    somaMortesTotais += mortetotais;
 
-                    somatestetotais += testetotal;
+                    somaTesteTotais += testetotal;
                 }
             }
 
-            double caso1Mpes = somacasototal * 1000000 / somapop;
-            double morte1Mpes = somamortestotais * 1000000 / somapop;
-            double teste1Mpes = somatestetotais * 1000000 / somapop;
+            double caso1Mpes = somaCasoTotal * 1000000 / somaPop;
+            double morte1Mpes = somaMortesTotais * 1000000 / somaPop;
+            double teste1Mpes = somaTesteTotais * 1000000 / somaPop;
 
             Console.WriteLine($"\nContinente: {continenteEscolhido}" +
-                                      $"\nPopulação total: {somapop.ToString("N0")}" +
+                                      $"\nPopulação total: {somaPop:N0}" +
                                       $"\nCASOS" +
-                                      $"\n   Casos novos totais: {somanovos.ToString("N0")}" +
-                                      $"\n   Casos ativos totais: {somaativo.ToString("N0")}" +
-                                      $"\n   Casos criticos totais: {somacritico.ToString("N0")}" +
-                                      $"\n   Casos recuperados totais: {somarecuperado.ToString("N0")}" +
-                                      $"\n   Casos por 1M de possoas totais: {caso1Mpes.ToString("N0")}" +
-                                      $"\n   Casos totais: {somacasototal.ToString("N0")}" +
+                                      $"\n   Casos novos totais: {somaNovos:N0}" +
+                                      $"\n   Casos ativos totais: {somaAtivo:N0}" +
+                                      $"\n   Casos criticos totais: {somaCritico:N0}" +
+                                      $"\n   Casos recuperados totais: {somaRecuperado:N0}" +
+                                      $"\n   Casos por 1M de possoas totais: {caso1Mpes:N0}" +
+                                      $"\n   Casos totais: {somaCasoTotal:N0}" +
                                       $"\nMORTES" +
-                                      $"\n    Mortes novas totais: {somamortesnovas.ToString("N0")}" +
-                                      $"\n    Mortes por 1M pessoas totais: {morte1Mpes.ToString("N0")}" +
-                                      $"\n    Mortes totais: {somamortestotais.ToString("N0")}" +
+                                      $"\n    Mortes novas totais: {somaMortesNovas:N0}" +
+                                      $"\n    Mortes por 1M pessoas totais: {morte1Mpes:N0}" +
+                                      $"\n    Mortes totais: {somaMortesTotais:N0}" +
                                       $"\nTESTES" +
-                                      $"\n   Testes por 1M pessoas totais: {teste1Mpes.ToString("N0")}" +
-                                      $"\n   Testes totais: {somatestetotais.ToString("N0")}\n");
+                                      $"\n   Testes por 1M pessoas totais: {teste1Mpes:N0}" +
+                                      $"\n   Testes totais: {somaTesteTotais:N0}\n");
+        }
+        static async Task Ranking()
+        {
+            /*string escolha = Console.ReadLine();
+
+            Console.Write("1 - Casos totais" +
+                          "\n2 - Casos recuperados" +
+                          "\n3 - Mortes totais" +
+                          "\n4 - Testes totais" +
+                          "\nEsolha uma opção de ranking: ");*/
+
+            StatisticsModel info = await MetodosApi.GetEstatistica();
+            //casos recuperados
+
+            int[] maiores = new int[10];
+            //fazer outro for
+
+            //for pega o maior nº
+            for (int i = 0; i < info.Response.Length; i++)
+            {
+                var item = info.Response[i];
+
+                if (item.Cases.Recovered == null)
+                    continue;
+
+                if (maiores[0] < item.Cases.Recovered)
+                    maiores[0] = item.Cases.Recovered.Value;
+
+
+            }
+            for (int i = 0; i < info.Response.Length; i++)
+            {
+                var item = info.Response[i];
+
+                if (item.Cases.Recovered == null)
+                    continue;
+
+                if (maiores[0] > item.Cases.Recovered && maiores[1] < item.Cases.Recovered)
+                    maiores[1] = item.Cases.Recovered.Value;
+
+            }
+            for (int i = 0; i < info.Response.Length; i++)
+            {
+                var item = info.Response[i];
+
+                if (item.Cases.Recovered == null)
+                    continue;
+
+                if (maiores[1] > item.Cases.Recovered && maiores[2] < item.Cases.Recovered)
+                    maiores[2] = item.Cases.Recovered.Value;
+            }
+            for (int i = 0; i < info.Response.Length; i++)
+            {
+                var item = info.Response[i];
+
+                if (item.Cases.Recovered == null)
+                    continue;
+
+                if (maiores[2] > item.Cases.Recovered && maiores[3] < item.Cases.Recovered)
+                    maiores[3] = item.Cases.Recovered.Value;
+            }
+            for (int i = 0; i < info.Response.Length; i++)
+            {
+                var item = info.Response[i];
+
+                if (item.Cases.Recovered == null)
+                    continue;
+
+                if (maiores[3] > item.Cases.Recovered && maiores[4] < item.Cases.Recovered)
+                    maiores[4] = item.Cases.Recovered.Value;
+            }
+            for (int i = 0; i < info.Response.Length; i++)
+            {
+                var item = info.Response[i];
+
+                if (item.Cases.Recovered == null)
+                    continue;
+
+                if (maiores[4] > item.Cases.Recovered && maiores[5] < item.Cases.Recovered)
+                    maiores[5] = item.Cases.Recovered.Value;
+            }
+            for (int i = 0; i < info.Response.Length; i++)
+            {
+                var item = info.Response[i];
+
+                if (item.Cases.Recovered == null)
+                    continue;
+
+                if (maiores[5] > item.Cases.Recovered && maiores[6] < item.Cases.Recovered)
+                    maiores[6] = item.Cases.Recovered.Value;
+            }
+            for (int i = 0; i < info.Response.Length; i++)
+            {
+                var item = info.Response[i];
+
+                if (item.Cases.Recovered == null)
+                    continue;
+
+                if (maiores[6] > item.Cases.Recovered && maiores[7] < item.Cases.Recovered)
+                    maiores[7] = item.Cases.Recovered.Value;
+            }
+            for (int i = 0; i < info.Response.Length; i++)
+            {
+                var item = info.Response[i];
+
+                if (item.Cases.Recovered == null)
+                    continue;
+
+                if (maiores[7] > item.Cases.Recovered && maiores[8] < item.Cases.Recovered)
+                    maiores[8] = item.Cases.Recovered.Value;
+            }
+            for (int i = 0; i < info.Response.Length; i++)
+            {
+                var item = info.Response[i];
+
+                if (item.Cases.Recovered == null)
+                    continue;
+
+                if (maiores[8] > item.Cases.Recovered && maiores[9] < item.Cases.Recovered)
+                    maiores[9] = item.Cases.Recovered.Value;
+            }
+
+            for (int i = 0; i < maiores.Length; i++)
+            {
+                //maiores[i] = maiorNumero;
+                Console.WriteLine(maiores[i]);
+            }
+
+            /*for (int i = 0; i < valores.Length; i++)
+            {
+                valores[i] = maiorNumero;
+                Console.WriteLine(valores[i]);
+            }*/
         }
     }
 }
